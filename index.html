@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meu Plano de Cutting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --secondary: #1565C0;
+            --secondary-light: #2196F3;
+            --accent: #FF9800;
+            --danger: #f44336;
+            --light: #f8f9fa;
+            --dark: #212121;
+            --gray: #757575;
+            --gray-light: #e0e0e0;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .app-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .app-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .date-display {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Navegação */
+        .app-nav {
+            display: flex;
+            background-color: white;
+            border-bottom: 1px solid var(--gray-light);
+            position: sticky;
+            top: 130px;
+            z-index: 99;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .nav-item i {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        /* Conteúdo principal */
+        .main-content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .card.parametros {
+            border-left-color: var(--secondary);
+        }
+
+        .card.horarios {
+            border-left-color: var(--accent);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .macros-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .macro-item {
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: var(--border-radius);
+            background-color: var(--light);
+        }
+
+        .macro-item:nth-child(1) { border-top: 4px solid #4CAF50; }
+        .macro-item:nth-child(2) { border-top: 4px solid #2196F3; }
+        .macro-item:nth-child(3) { border-top: 4px solid #FF9800; }
+        .macro-item:nth-child(4) { border-top: 4px solid #f44336; }
+
+        .macro-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .macro-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Horários */
+        .horarios-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .horario-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent);
+        }
+
+        .horario-time {
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 70px;
+            color: var(--dark);
+        }
+
+        .horario-desc {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        /* Dia da semana */
+        .dia-selector {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            gap: 10px;
+        }
+
+        .dia-item {
+            flex: 0 0 auto;
+            padding: 12px 20px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .dia-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Refeições */
+        .refeicao-card {
+            margin-bottom: 25px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .refeicao-header {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .refeicao-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .refeicao-time {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .refeicao-content {
+            padding: 20px;
+        }
+
+        .alimento-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--gray-light);
+        }
+
+        .alimento-item:last-child {
+            border-bottom: none;
+        }
+
+        .alimento-name {
+            font-weight: 500;
+        }
+
+        .alimento-qtd {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nota-geral {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255, 152, 0, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Controle diário */
+        .controle-card {
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .controle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--gray-light);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .macros-controle {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .macro-controle-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            background-color: var(--light);
+        }
+
+        /* Botões */
+        .btn {
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Footer */
+        .app-footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--gray-light);
+            margin-top: 30px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .macros-grid, .macros-controle {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <header class="app-header">
+            <h1><i class="fas fa-apple-alt"></i> Meu Plano de Cutting</h1>
+            <p>Recomposição Corporal - Acompanhamento Diário</p>
+            <div class="date-display" id="currentDate">Carregando data...</div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="app-nav">
+            <div class="nav-item active" data-target="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </div>
+            <div class="nav-item" data-target="plano">
+                <i class="fas fa-utensils"></i>
+                <span>Plano</span>
+            </div>
+            <div class="nav-item" data-target="controle">
+                <i class="fas fa-chart-line"></i>
+                <span>Controle</span>
+            </div>
+            <div class="nav-item" data-target="parametros">
+                <i class="fas fa-cogs"></i>
+                <span>Parâmetros</span>
+            </div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard" class="section active">
+                <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                
+                <div class="card parametros">
+                    <h3 class="card-title">Parâmetros do Cutting</h3>
+                    <p>Recomposição corporal - Acompanhe suas metas diárias</p>
+                    
+                    <div class="macros-grid">
+                        <div class="macro-item">
+                            <div class="macro-value">2.100</div>
+                            <div class="macro-label">Calorias</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-value">160g</div>
+                            <div class="macro-label">Proteína</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-value">210g</div>
+                            <div class="macro-label">Carboidratos</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-value">60g</div>
+                            <div class="macro-label">Gorduras</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card horarios">
+                    <h3 class="card-title">Horários Fixos</h3>
+                    
+                    <div class="horarios-list">
+                        <div class="horario-item">
+                            <div class="horario-time">04:30</div>
+                            <div class="horario-desc">Pré-treino</div>
+                        </div>
+                        <div class="horario-item">
+                            <div class="horario-time">06:30</div>
+                            <div class="horario-desc">Pós-treino</div>
+                        </div>
+                        <div class="horario-item">
+                            <div class="horario-time">09:30</div>
+                            <div class="horario-desc">Lanche</div>
+                        </div>
+                        <div class="horario-item">
+                            <div class="horario-time">12:00</div>
+                            <div class="horario-desc">Almoço</div>
+                        </div>
+                        <div class="horario-item">
+                            <div class="horario-time">16:00</div>
+                            <div class="horario-desc">Lanche</div>
+                        </div>
+                        <div class="horario-item">
+                            <div class="horario-time">20:00</div>
+                            <div class="horario-desc">Jantar</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Hoje é: <span id="diaAtual">Segunda-feira</span></h3>
+                    <p>Confira seu plano alimentar para hoje e mantenha-se na dieta!</p>
+                    <button class="btn btn-primary btn-block" id="verPlanoHoje">
+                        <i class="fas fa-utensils"></i> Ver plano de hoje
+                    </button>
+                </div>
+            </section>
+
+            <!-- Plano Alimentar -->
+            <section id="plano" class="section">
+                <h2 class="section-title"><i class="fas fa-calendar-week"></i> Plano Semanal</h2>
+                
+                <div class="dia-selector">
+                    <div class="dia-item active" data-dia="seg">Segunda</div>
+                    <div class="dia-item" data-dia="ter">Terça</div>
+                    <div class="dia-item" data-dia="qua">Quarta</div>
+                    <div class="dia-item" data-dia="qui">Quinta</div>
+                    <div class="dia-item" data-dia="sex">Sexta</div>
+                    <div class="dia-item" data-dia="sab">Sábado</div>
+                    <div class="dia-item" data-dia="dom">Domingo</div>
+                </div>
+                
+                <!-- Conteúdo será preenchido pelo JavaScript -->
+                <div id="plano-dia">
+                    <!-- Plano do dia será carregado aqui -->
+                </div>
+            </section>
+
+            <!-- Controle Diário -->
+            <section id="controle" class="section">
+                <h2 class="section-title"><i class="fas fa-chart-pie"></i> Controle Diário</h2>
+                
+                <div class="controle-card">
+                    <div class="controle-header">
+                        <h3>Consumo de Calorias</h3>
+                        <span id="calorias-consumidas">0</span>/<span>2100</span> kcal
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="calorias-progresso" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="macros-controle">
+                        <div class="macro-controle-item">
+                            <div class="macro-value" id="proteina-consumida">0g</div>
+                            <div class="macro-label">Proteína</div>
+                        </div>
+                        <div class="macro-controle-item">
+                            <div class="macro-value" id="carbo-consumido">0g</div>
+                            <div class="macro-label">Carbo</div>
+                        </div>
+                        <div class="macro-controle-item">
+                            <div class="macro-value" id="gordura-consumida">0g</div>
+                            <div class="macro-label">Gordura</div>
+                        </div>
+                        <div class="macro-controle-item">
+                            <div class="macro-value" id="refeicoes-feitas">0</div>
+                            <div class="macro-label">Refeições</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Registrar Refeição</h3>
+                    <p>Registre suas refeições para acompanhar seu progresso</p>
+                    
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" id="registrar-refeicao">
+                            <i class="fas fa-plus-circle"></i> Registrar Refeição
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Histórico de Hoje</h3>
+                    <div id="historico-refeicoes">
+                        <p style="text-align: center; color: var(--gray); padding: 20px;">
+                            Nenhuma refeição registrada hoje
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Parâmetros -->
+            <section id="parametros" class="section">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> Parâmetros do Cutting</h2>
+                
+                <div class="card">
+                    <h3 class="card-title">Metas Nutricionais</h3>
+                    
+                    <div class="alimento-item">
+                        <span>Calorias diárias:</span>
+                        <span class="alimento-qtd">~2.100 kcal</span>
+                    </div>
+                    <div class="alimento-item">
+                        <span>Proteína:</span>
+                        <span class="alimento-qtd">~160 g</span>
+                    </div>
+                    <div class="alimento-item">
+                        <span>Carboidratos:</span>
+                        <span class="alimento-qtd">~210 g</span>
+                    </div>
+                    <div class="alimento-item">
+                        <span>Gordura:</span>
+                        <span class="alimento-qtd">~60 g</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Observações Importantes</h3>
+                    <div class="nota-geral">
+                        <p><strong>1 colher (10g) de azeite</strong> por refeição principal</p>
+                        <p><strong>Salada e legumes</strong> à vontade nas refeições indicadas</p>
+                        <p><strong>Jantar</strong> com baixo carboidrato todos os dias</p>
+                        <p><strong>Hidratação:</strong> Mínimo de 3L de água por dia</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Sobre o Plano</h3>
+                    <p>Este plano de cutting para recomposição corporal é focado em manter alta ingestão proteica para preservação muscular enquanto promove deficit calórico para perda de gordura.</p>
+                    <p>Os horários foram ajustados para se adequarem à rotina de treino e otimizarem a nutrição peri-treino.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Rodapé -->
+        <footer class="app-footer">
+            <p>Plano de Cutting - Recomposition</p>
+            <p>Acompanhe sua dieta e alcance seus objetivos!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dados do plano alimentar
+        const planoAlimentar = {
+            seg: {
+                dia: "Segunda-feira",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Frango", quantidade: "180 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Ovos", quantidade: "3 unidades" },
+                        { alimento: "Pão integral", quantidade: "2 fatias" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Iogurte natural", quantidade: "1 pote" },
+                        { alimento: "Aveia", quantidade: "30 g" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            ter: {
+                dia: "Terça-feira",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Carne magra", quantidade: "180 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Iogurte natural", quantidade: "170 g" },
+                        { alimento: "Aveia", quantidade: "30 g" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Ovos", quantidade: "2 unidades" },
+                        { alimento: "Banana", quantidade: "1 unidade" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            qua: {
+                dia: "Quarta-feira",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Frango", quantidade: "180 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Ovos", quantidade: "3 unidades" },
+                        { alimento: "Fruta", quantidade: "1 unidade" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Pasta de amendoim", quantidade: "10 g" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            qui: {
+                dia: "Quinta-feira",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Ovos", quantidade: "4 unidades" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Aveia", quantidade: "40 g" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Ovos", quantidade: "3 unidades" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            sex: {
+                dia: "Sexta-feira",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Peixe", quantidade: "200 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Ovos", quantidade: "2 unidades" },
+                        { alimento: "Pão integral", quantidade: "2 fatias" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Iogurte natural", quantidade: "1 pote" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            sab: {
+                dia: "Sábado",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Frango", quantidade: "180 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Iogurte natural", quantidade: "1 pote" },
+                        { alimento: "Banana", quantidade: "1 unidade" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Aveia", quantidade: "30 g" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            },
+            dom: {
+                dia: "Domingo",
+                refeicoes: {
+                    preTreino: [
+                        { alimento: "Banana", quantidade: "1 unidade" },
+                        { alimento: "Whey protein", quantidade: "30 g" },
+                        { alimento: "Mel", quantidade: "10 g" }
+                    ],
+                    posTreino: [
+                        { alimento: "Arroz branco", quantidade: "200 g" },
+                        { alimento: "Carne", quantidade: "180 g" },
+                        { alimento: "Feijão", quantidade: "100 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheManha: [
+                        { alimento: "Omelete", quantidade: "3 ovos" }
+                    ],
+                    almoco: [
+                        { alimento: "Arroz", quantidade: "150 g" },
+                        { alimento: "Frango/Carne/Peixe", quantidade: "150 g" },
+                        { alimento: "Salada", quantidade: "livre" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ],
+                    lancheTarde: [
+                        { alimento: "Ovos", quantidade: "2 unidades" },
+                        { alimento: "Fruta", quantidade: "1 unidade" }
+                    ],
+                    jantar: [
+                        { alimento: "Frango/Peixe/Ovos", quantidade: "200 g" },
+                        { alimento: "Legumes", quantidade: "à vontade" },
+                        { alimento: "Azeite", quantidade: "10 g" }
+                    ]
+                }
+            }
+        };
+
+        // Dados de controle
+        let consumoDiario = {
+            calorias: 0,
+            proteina: 0,
+            carbo: 0,
+            gordura: 0,
+            refeicoes: []
+        };
+
+        // Data atual
+        function atualizarData() {
+            const now = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            const dataFormatada = now.toLocaleDateString('pt-BR', options);
+            document.getElementById('currentDate').textContent = dataFormatada;
+            
+            // Atualizar dia da semana
+            const dias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+            document.getElementById('diaAtual').textContent = dias[now.getDay()].charAt(0).toUpperCase() + dias[now.getDay()].slice(1);
+            
+            // Definir dia ativo no seletor
+            const diasMap = {0: 'dom', 1: 'seg', 2: 'ter', 3: 'qua', 4: 'qui', 5: 'sex', 6: 'sab'};
+            const diaAtual = diasMap[now.getDay()];
+            
+            // Remover classe active de todos os dias
+            document.querySelectorAll('.dia-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Adicionar classe active ao dia atual
+            document.querySelector(`.dia-item[data-dia="${diaAtual}"]`).classList.add('active');
+            
+            // Carregar plano do dia atual
+            carregarPlanoDia(diaAtual);
+        }
+
+        // Carregar plano do dia
+        function carregarPlanoDia(dia) {
+            const planoDia = planoAlimentar[dia];
+            const container = document.getElementById('plano-dia');
+            
+            let html = `
+                <div class="card">
+                    <h3 class="card-title">${planoDia.dia} - Plano Completo</h3>
+                </div>
+                
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Pré-treino</div>
+                        <div class="refeicao-time">04:30</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            // Pré-treino (fixo para todos os dias)
+            html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">Banana</span>
+                            <span class="alimento-qtd">1 unidade</span>
+                        </div>
+                        <div class="alimento-item">
+                            <span class="alimento-name">Whey protein</span>
+                            <span class="alimento-qtd">30 g</span>
+                        </div>
+                        <div class="alimento-item">
+                            <span class="alimento-name">Mel</span>
+                            <span class="alimento-qtd">10 g</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Pós-treino
+            html += `
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Pós-treino</div>
+                        <div class="refeicao-time">06:30</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            planoDia.refeicoes.posTreino.forEach(item => {
+                html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">${item.alimento}</span>
+                            <span class="alimento-qtd">${item.quantidade}</span>
+                        </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            // Lanche da manhã
+            html += `
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Lanche da Manhã</div>
+                        <div class="refeicao-time">09:30</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            planoDia.refeicoes.lancheManha.forEach(item => {
+                html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">${item.alimento}</span>
+                            <span class="alimento-qtd">${item.quantidade}</span>
+                        </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            // Almoço
+            html += `
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Almoço</div>
+                        <div class="refeicao-time">12:00</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            planoDia.refeicoes.almoco.forEach(item => {
+                html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">${item.alimento}</span>
+                            <span class="alimento-qtd">${item.quantidade}</span>
+                        </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            // Lanche da tarde
+            html += `
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Lanche da Tarde</div>
+                        <div class="refeicao-time">16:00</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            planoDia.refeicoes.lancheTarde.forEach(item => {
+                html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">${item.alimento}</span>
+                            <span class="alimento-qtd">${item.quantidade}</span>
+                        </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            // Jantar
+            html += `
+                <div class="refeicao-card">
+                    <div class="refeicao-header">
+                        <div class="refeicao-title">Jantar (baixo carbo)</div>
+                        <div class="refeicao-time">20:00</div>
+                    </div>
+                    <div class="refeicao-content">
+            `;
+            
+            planoDia.refeicoes.jantar.forEach(item => {
+                html += `
+                        <div class="alimento-item">
+                            <span class="alimento-name">${item.alimento}</span>
+                            <span class="alimento-qtd">${item.quantidade}</span>
+                        </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+                
+                <div class="nota-geral">
+                    <p><strong>Lembrete:</strong> 1 colher (10g) de azeite por refeição principal. Salada e legumes à vontade nas refeições indicadas.</p>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // Atualizar controle diário
+        function atualizarControle() {
+            // Atualizar valores na interface
+            document.getElementById('calorias-consumidas').textContent = consumoDiario.calorias;
+            document.getElementById('proteina-consumida').textContent = consumoDiario.proteina + 'g';
+            document.getElementById('carbo-consumido').textContent = consumoDiario.carbo + 'g';
+            document.getElementById('gordura-consumida').textContent = consumoDiario.gordura + 'g';
+            document.getElementById('refeicoes-feitas').textContent = consumoDiario.refeicoes.length;
+            
+            // Atualizar barra de progresso
+            const percentualCalorias = Math.min((consumoDiario.calorias / 2100) * 100, 100);
+            document.getElementById('calorias-progresso').style.width = percentualCalorias + '%';
+            
+            // Atualizar histórico
+            const historicoContainer = document.getElementById('historico-refeicoes');
+            
+            if (consumoDiario.refeicoes.length === 0) {
+                historicoContainer.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 20px;">Nenhuma refeição registrada hoje</p>';
+            } else {
+                let historicoHTML = '';
+                consumoDiario.refeicoes.forEach((refeicao, index) => {
+                    historicoHTML += `
+                        <div class="alimento-item" style="padding: 15px 0; border-bottom: 1px solid var(--gray-light);">
+                            <div>
+                                <strong>${refeicao.nome}</strong><br>
+                                <small style="color: var(--gray);">${refeicao.horario}</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="color: var(--primary); font-weight: 600;">${refeicao.calorias} kcal</span><br>
+                                <small style="font-size: 0.8rem;">P:${refeicao.proteina}g C:${refeicao.carbo}g G:${refeicao.gordura}g</small>
+                            </div>
+                        </div>
+                    `;
+                });
+                historicoContainer.innerHTML = historicoHTML;
+            }
+        }
+
+        // Registrar uma nova refeição (simulação)
+        function registrarRefeicao() {
+            // Simulando uma refeição registrada
+            const refeicoesExemplo = [
+                { nome: "Pré-treino", horario: "04:30", calorias: 250, proteina: 25, carbo: 30, gordura: 2 },
+                { nome: "Pós-treino", horario: "06:45", calorias: 550, proteina: 45, carbo: 70, gordura: 10 },
+                { nome: "Lanche da manhã", horario: "09:30", calorias: 300, proteina: 20, carbo: 25, gordura: 12 }
+            ];
+            
+            if (consumoDiario.refeicoes.length < refeicoesExemplo.length) {
+                const novaRefeicao = refeicoesExemplo[consumoDiario.refeicoes.length];
+                consumoDiario.refeicoes.push(novaRefeicao);
+                
+                // Atualizar totais
+                consumoDiario.calorias += novaRefeicao.calorias;
+                consumoDiario.proteina += novaRefeicao.proteina;
+                consumoDiario.carbo += novaRefeicao.carbo;
+                consumoDiario.gordura += novaRefeicao.gordura;
+                
+                atualizarControle();
+                
+                // Feedback visual
+                alert(`Refeição "${novaRefeicao.nome}" registrada com sucesso!`);
+            } else {
+                alert("Todas as refeições de exemplo já foram registradas. Em uma aplicação real, você poderia adicionar refeições personalizadas.");
+            }
+        }
+
+        // Navegação entre seções
+        function configurarNavegacao() {
+            const navItens = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.section');
+            
+            navItens.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Atualizar navegação ativa
+                    navItens.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar seção correspondente
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === target) {
+                            section.classList.add('active');
+                        }
+                    });
+                    
+                    // Se for a seção de plano, carregar o dia atual
+                    if (target === 'plano') {
+                        const now = new Date();
+                        const diasMap = {0: 'dom', 1: 'seg', 2: 'ter', 3: 'qua', 4: 'qui', 5: 'sex', 6: 'sab'};
+                        const diaAtual = diasMap[now.getDay()];
+                        carregarPlanoDia(diaAtual);
+                    }
+                });
+            });
+            
+            // Configurar seletor de dias
+            document.querySelectorAll('.dia-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remover classe active de todos os dias
+                    document.querySelectorAll('.dia-item').forEach(dia => {
+                        dia.classList.remove('active');
+                    });
+                    
+                    // Adicionar classe active ao dia clicado
+                    this.classList.add('active');
+                    
+                    // Carregar plano do dia selecionado
+                    const diaSelecionado = this.getAttribute('data-dia');
+                    carregarPlanoDia(diaSelecionado);
+                });
+            });
+            
+            // Botão "Ver plano de hoje"
+            document.getElementById('verPlanoHoje').addEventListener('click', function() {
+                // Ativar navegação para o plano
+                navItens.forEach(nav => nav.classList.remove('active'));
+                document.querySelector('.nav-item[data-target="plano"]').classList.add('active');
+                
+                // Mostrar seção de plano
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === 'plano') {
+                        section.classList.add('active');
+                    }
+                });
+                
+                // Carregar plano do dia atual
+                const now = new Date();
+                const diasMap = {0: 'dom', 1: 'seg', 2: 'ter', 3: 'qua', 4: 'qui', 5: 'sex', 6: 'sab'};
+                const diaAtual = diasMap[now.getDay()];
+                
+                // Ativar dia atual no seletor
+                document.querySelectorAll('.dia-item').forEach(dia => {
+                    dia.classList.remove('active');
+                    if (dia.getAttribute('data-dia') === diaAtual) {
+                        dia.classList.add('active');
+                    }
+                });
+                
+                carregarPlanoDia(diaAtual);
+            });
+            
+            // Botão para registrar refeição
+            document.getElementById('registrar-refeicao').addEventListener('click', registrarRefeicao);
+        }
+
+        // Inicializar aplicativo
+        document.addEventListener('DOMContentLoaded', function() {
+            atualizarData();
+            configurarNavegacao();
+            atualizarControle();
+            
+            // Inicializar com algumas refeições registradas para exemplo
+            setTimeout(() => {
+                if (consumoDiario.refeicoes.length === 0) {
+                    // Registrar duas refeições de exemplo
+                    registrarRefeicao();
+                    setTimeout(registrarRefeicao, 300);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
